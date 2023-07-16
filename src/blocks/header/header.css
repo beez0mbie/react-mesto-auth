@@ -1,4 +1,7 @@
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   min-width: 880px;
   box-sizing: border-box;
   padding-top: 45px;
@@ -10,11 +13,13 @@
   .header {
     min-width: 100%;
     padding-left: 19px;
+    padding-right: 19px;
   }
 }
 
 @media screen and (max-width: 770px) {
   .header {
+    flex-direction: column-reverse;
     padding-top: 28px;
     padding-left: 0;
     padding-right: 0;
