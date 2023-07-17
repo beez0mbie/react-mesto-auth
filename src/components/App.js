@@ -4,6 +4,7 @@ import Header from './Header';
 import Main from './Main';
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 import DeleteCardPopup from './DeleteCardPopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -162,6 +163,10 @@ function App() {
           /> */}
           <Login />
           <Footer />
+          <InfoTooltip
+            isOpen={true}
+            onClose={closeAllPopups}
+          />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}

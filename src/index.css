@@ -93,3 +93,8 @@
 @import url(./blocks/popup-img/popup-img.css);
 @import url(./blocks/popup-img/__image/popup-img__image.css);
 @import url(./blocks/popup-img/__figcaption/popup-img__figcaption.css);
+
+/* popup-info */
+@import url(./blocks/popup-info/popup-info.css);
+@import url(./blocks/popup-info/__svg/popup-info__svg.css);
+@import url(./blocks/popup-info/__title/popup-info__title.css);
