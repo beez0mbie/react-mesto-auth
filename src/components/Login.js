@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Login() {
+export default function Login({ handleLogin }) {
   return (
     <div className="sign">
       <h1 className="sign__title">Вход</h1>

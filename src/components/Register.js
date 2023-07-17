@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Register() {
   return (
@@ -42,11 +43,11 @@ export default function Register() {
       </form>
       <div className="sign__signin">
         <p className="sign__signin-desc">Уже зарегистрированы?</p>
-        <a
-          href="/login"
+        <Link
+          to="/sign-in"
           className="sign__signin-link">
           Войти
-        </a>
+        </Link>
       </div>
     </div>
   );

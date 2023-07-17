@@ -4,6 +4,8 @@ import Header from './Header';
 import Main from './Main';
 import Login from './Login';
 import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
+import { NonExistPage } from './404';
 import InfoTooltip from './InfoTooltip';
 import DeleteCardPopup from './DeleteCardPopup';
 import EditProfilePopup from './EditProfilePopup';
@@ -13,8 +15,10 @@ import ImagePopup from './ImagePopup';
 import { api } from '../utils';
 import { CurrentUserContext, CardsContext } from '../contexts';
 import { hasMyLike } from '../utils';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -59,6 +63,10 @@ function App() {
     }
     return () => document.removeEventListener('keydown', handleClosePopupByEsc);
   }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isDeletePopupOpen]);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -152,19 +160,47 @@ function App() {
     <CardsContext.Provider value={cards}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
-          <Header />
-          {/* <Main
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardTrashClick={handleCardTrashClick}
-          /> */}
-          <Login />
+          <Header
+            isLoggedIn={isLoggedIn}
+            userEmail="some@some.ru"
+          />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute
+                  element={Main}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardTrashClick={handleCardTrashClick}
+                  isLoggedIn={isLoggedIn}
+                />
+              }
+            />
+            <Route
+              path="sign-in"
+              element={<Login handleLogin={handleLogin} />}
+            />
+            <Route
+              path="sign-up"
+              element={<Register />}
+            />
+            <Route
+              path="*"
+              element={
+                <ProtectedRoute
+                  element={NonExistPage}
+                  isLoggedIn={isLoggedIn}
+                />
+              }
+            />
+          </Routes>
           <Footer />
           <InfoTooltip
-            isOpen={true}
+            isOpen={false}
             onClose={closeAllPopups}
           />
           <EditAvatarPopup

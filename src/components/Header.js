@@ -1,7 +1,10 @@
 import React from 'react';
 import logo from '../images/Logo.svg';
+import { Link, useMatch } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ isLoggedIn, userEmail }) => {
+  const signUp = useMatch('sign-up');
+  const signIn = useMatch('sign-in');
   return (
     <header className="header">
       <div className="header__logo-container">
@@ -13,12 +16,30 @@ const Header = () => {
         <button className="header__hamburger header__hamburger_active"></button>
       </div>
       <div className="header__auth-container header__auth-container_active">
-        <p className="header__email">email@some.com</p>
-        <a
-          className="header__action"
-          href="/login">
-          Выйти
-        </a>
+        {isLoggedIn && (
+          <>
+            <p className="header__email">{userEmail}</p>
+            <Link
+              className="header__action"
+              to="/sign-in">
+              Выйти
+            </Link>
+          </>
+        )}
+        {signUp && (
+          <Link
+            className="header__action"
+            to="/sign-in">
+            Войти
+          </Link>
+        )}
+        {signIn && (
+          <Link
+            className="header__action"
+            to="/sign-up">
+            Регистрация
+          </Link>
+        )}
       </div>
     </header>
   );
