@@ -1,39 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Register() {
+  const [formValue, setFormValue] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="sign">
       <h1 className="sign__title">Регистрация</h1>
       <form
-        // onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
         id="register-form"
         className="sign__form">
         <label
-          htmlFor="register-email"
+          htmlFor="email"
           className="sign__field"></label>
         <input
           required
           placeholder="Email"
-          id="register-email"
-          name="register-email"
+          id="email"
+          name="email"
           className="sign__input"
           type="text"
-          // value={formValue.email}
-          // onChange={handleChange}
+          value={formValue.email}
+          onChange={handleChange}
         />
         <label
-          htmlFor="register-password"
+          htmlFor="password"
           className="sign__field"></label>
         <input
           required
           placeholder="Пароль"
-          id="register-password"
-          name="register-password"
+          id="password"
+          name="password"
           className="sign__input"
           type="password"
-          // value={formValue.password}
-          // onChange={handleChange}
+          value={formValue.password}
+          onChange={handleChange}
         />
         <button
           type="submit"
