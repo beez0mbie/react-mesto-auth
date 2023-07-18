@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import sucsess_svg from '../images/tooltip-sucsess.svg';
 import fail_svg from '../images/tooltip-fail.svg';
 
-export default function InfoTooltip({ isOpen, onClose }) {
+export default function InfoTooltip({ isOpen, onClose, sucsess }) {
   const popup = useRef();
   useEffect(() => {
     popup.current.addEventListener('mousedown', (evt) => {
@@ -11,7 +11,6 @@ export default function InfoTooltip({ isOpen, onClose }) {
       }
     });
   }, [onClose]);
-  const sucsess = false;
   return (
     <div
       className={`popup ${isOpen ? 'popup_opened' : ''}`}

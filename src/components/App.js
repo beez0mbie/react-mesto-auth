@@ -23,6 +23,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
+  const [isSucsess, setIsSucsess] = useState(false);
   const [cardIdToDelete, setCardIdToDelete] = useState(null);
   const [selectedCard, setSelectedCard] = useState({ name: '', link: '' });
   const [currentUser, setCurrentUser] = useState({
@@ -57,15 +59,27 @@ function App() {
       isEditAvatarPopupOpen ||
       isEditProfilePopupOpen ||
       isAddPlacePopupOpen ||
-      isDeletePopupOpen
+      isDeletePopupOpen ||
+      isInfoPopupOpen
     ) {
       document.addEventListener('keydown', handleClosePopupByEsc);
     }
     return () => document.removeEventListener('keydown', handleClosePopupByEsc);
-  }, [isEditAvatarPopupOpen, isEditProfilePopupOpen, isAddPlacePopupOpen, isDeletePopupOpen]);
+  }, [
+    isEditAvatarPopupOpen,
+    isEditProfilePopupOpen,
+    isAddPlacePopupOpen,
+    isDeletePopupOpen,
+    isInfoPopupOpen,
+  ]);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
+  };
+
+  const handleInfoPopup = (sucsess) => {
+    setIsSucsess(sucsess);
+    setIsInfoPopupOpen(true);
   };
 
   const handleEditAvatarClick = () => {
@@ -94,6 +108,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsDeletePopupOpen(false);
+    setIsInfoPopupOpen(false);
     setSelectedCard({ name: '', link: '' });
     setCardIdToDelete(null);
   };
@@ -186,7 +201,7 @@ function App() {
             />
             <Route
               path="sign-up"
-              element={<Register />}
+              element={<Register handleInfoPopup={handleInfoPopup} />}
             />
             <Route
               path="*"
@@ -200,8 +215,9 @@ function App() {
           </Routes>
           <Footer />
           <InfoTooltip
-            isOpen={false}
+            isOpen={isInfoPopupOpen}
             onClose={closeAllPopups}
+            sucsess={isSucsess}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}

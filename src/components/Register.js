@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import * as apiAuth from '../utils/ApiAuth';
 
-export default function Register() {
+export default function Register({ handleInfoPopup }) {
+  const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: '',
     password: '',
@@ -17,6 +19,16 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    apiAuth
+      .register(formValue.password, formValue.email)
+      .then((res) => {
+        handleInfoPopup(true);
+        navigate('/sign-in');
+      })
+      .catch((err) => {
+        handleInfoPopup(false);
+        console.error(err);
+      });
   };
 
   return (
