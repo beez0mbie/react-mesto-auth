@@ -154,7 +154,6 @@ function App() {
     api
       .updateUserInfo(currentUser.name, currentUser.about)
       .then((user) => {
-        console.log('handleUpdateUser', currentUser);
         setCurrentUser((prevState) => ({
           ...prevState,
           ...user,
@@ -215,10 +214,7 @@ function App() {
     <CardsContext.Provider value={cards}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="page">
-          <Header
-            isLoggedIn={isLoggedIn}
-            handleExit={handleExit}
-          />
+          <Header handleExit={handleExit} />
           <Routes>
             <Route
               path="/"

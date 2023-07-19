@@ -1,13 +1,48 @@
 import React, { useState } from 'react';
 import logo from '../images/Logo.svg';
-import { Link, useMatch } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts';
 
-const Header = ({ isLoggedIn, handleExit }) => {
+const Header = ({ handleExit }) => {
   const curentUser = React.useContext(CurrentUserContext);
   const [isHamburgerActive, setIsHamburgerActive] = useState(false);
-  const signUp = useMatch('sign-up');
-  const signIn = useMatch('sign-in');
+  const location = useLocation();
+
+  const actionHeader = location.pathname;
+
+  const renderHeaderActions = () => {
+    switch (actionHeader) {
+      case '/sign-up':
+        return (
+          <Link
+            className="header__action"
+            to="/sign-in">
+            Войти
+          </Link>
+        );
+      case '/sign-in':
+        return (
+          <Link
+            className="header__action"
+            to="/sign-up">
+            Регистрация
+          </Link>
+        );
+      default:
+        return (
+          <>
+            <p className="header__email">{curentUser.email}</p>
+            <Link
+              onClick={handleExit}
+              className="header__action"
+              to="/sign-in">
+              Выйти
+            </Link>
+          </>
+        );
+    }
+  };
+
   return (
     <header className="header">
       <div className="header__logo-container">
@@ -25,31 +60,7 @@ const Header = ({ isLoggedIn, handleExit }) => {
         className={`header__auth-container ${
           isHamburgerActive && 'header__auth-container_active'
         }`}>
-        {isLoggedIn && (
-          <>
-            <p className="header__email">{curentUser.email}</p>
-            <Link
-              onClick={handleExit}
-              className="header__action"
-              to="/sign-in">
-              Выйти
-            </Link>
-          </>
-        )}
-        {signUp && (
-          <Link
-            className="header__action"
-            to="/sign-in">
-            Войти
-          </Link>
-        )}
-        {signIn && (
-          <Link
-            className="header__action"
-            to="/sign-up">
-            Регистрация
-          </Link>
-        )}
+        {renderHeaderActions()}
       </div>
     </header>
   );

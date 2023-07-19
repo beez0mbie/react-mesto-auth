@@ -23,8 +23,6 @@ export default function Login({ handleLogin, handleInfoPopup }) {
       .authorize(formValue.email, formValue.password)
       .then((data) => {
         if (data.token) {
-          console.log(data);
-          console.log(data.token);
           localStorage.setItem('jwt', data.token);
           handleLogin();
           navigate('/', { replace: true });
