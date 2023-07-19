@@ -42,8 +42,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    handleTokenCheck();
-    if (isLoggedIn) handleGetAppInfo();
+    if (isLoggedIn) {
+      handleGetAppInfo();
+    } else {
+      handleTokenCheck();
+    }
   }, [isLoggedIn]);
 
   useEffect(() => {
