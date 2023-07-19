@@ -23,7 +23,7 @@ export default function Register({ handleInfoPopup }) {
       .register(formValue.password, formValue.email)
       .then((res) => {
         handleInfoPopup(true);
-        navigate('/sign-in');
+        navigate('/sign-in', { replace: true });
       })
       .catch((err) => {
         handleInfoPopup(false);

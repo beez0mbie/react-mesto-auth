@@ -13,11 +13,13 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import { api } from '../utils';
+import * as apiAuth from '../utils/ApiAuth';
 import { CurrentUserContext, CardsContext } from '../contexts';
 import { hasMyLike } from '../utils';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 function App() {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -32,6 +34,7 @@ function App() {
     about: '',
     avatar: '',
     cohort: '',
+    email: '',
     _id: '',
   });
   const [cards, setCards] = useState([]);
@@ -39,15 +42,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    api
-      .getAppInfo()
-      .then((res) => {
-        const [userInfo, cards] = res;
-        setCurrentUser({ ...userInfo });
-        setCards(cards);
-      })
-      .catch((err) => console.error(`Error api.getAppInfo():\n ${err}`));
-  }, []);
+    handleTokenCheck();
+    if (isLoggedIn) handleGetAppInfo();
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const handleClosePopupByEsc = (event) => {
@@ -73,12 +70,51 @@ function App() {
     isInfoPopupOpen,
   ]);
 
+  const handleTokenCheck = () => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      apiAuth
+        .checkToken(token)
+        .then((res) => {
+          if (res) {
+            const email = res.data.email;
+            setCurrentUser((prevState) => ({
+              ...prevState,
+              email,
+            }));
+            setIsLoggedIn(true);
+            navigate('/', { replace: true });
+          }
+        })
+        .catch((err) => console.error(`Error apiAuth.checkToken():\n ${err}`));
+    }
+  };
+
+  const handleGetAppInfo = () => {
+    api
+      .getAppInfo()
+      .then((res) => {
+        const [userInfo, cards] = res;
+        setCurrentUser((prevState) => ({
+          ...prevState,
+          ...userInfo,
+        }));
+        setCards(cards);
+      })
+      .catch((err) => console.error(`Error api.getAppInfo():\n ${err}`));
+  };
+
   const handleLogin = () => {
     setIsLoggedIn(true);
   };
 
-  const handleInfoPopup = (sucsess) => {
-    setIsSucsess(sucsess);
+  const handleExit = () => {
+    localStorage.removeItem('jwt');
+    setIsLoggedIn(false);
+  };
+
+  const handleInfoPopup = (isSucsess) => {
+    setIsSucsess(isSucsess);
     setIsInfoPopupOpen(true);
   };
 
@@ -118,7 +154,11 @@ function App() {
     api
       .updateUserInfo(currentUser.name, currentUser.about)
       .then((user) => {
-        setCurrentUser(user);
+        console.log('handleUpdateUser', currentUser);
+        setCurrentUser((prevState) => ({
+          ...prevState,
+          ...user,
+        }));
         closeAllPopups();
       })
       .catch((err) => console.error(`Error api.updateUserInfo():\n ${err}`))
@@ -130,7 +170,7 @@ function App() {
     api
       .updateAvatar(currentUser.avatar)
       .then((user) => {
-        setCurrentUser(user);
+        setCurrentUser((prevState) => ({ ...prevState, ...user }));
         closeAllPopups();
       })
       .catch((err) => console.error(`Error api.updateAvatar():\n ${err}`))
@@ -177,7 +217,7 @@ function App() {
         <div className="page">
           <Header
             isLoggedIn={isLoggedIn}
-            userEmail="some@some.ru"
+            handleExit={handleExit}
           />
           <Routes>
             <Route
@@ -197,7 +237,12 @@ function App() {
             />
             <Route
               path="sign-in"
-              element={<Login handleLogin={handleLogin} />}
+              element={
+                <Login
+                  handleLogin={handleLogin}
+                  handleInfoPopup={handleInfoPopup}
+                />
+              }
             />
             <Route
               path="sign-up"
