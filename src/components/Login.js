@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as apiAuth from '../utils/ApiAuth';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login({ handleLogin, handleInfoPopup }) {
+export default function Login({ handleLogin, handleInfoPopup, handleSetEmail }) {
   const navigate = useNavigate();
   const [formValue, setFormValue] = useState({
     email: '',
@@ -25,6 +25,7 @@ export default function Login({ handleLogin, handleInfoPopup }) {
         if (data.token) {
           localStorage.setItem('jwt', data.token);
           handleLogin();
+          handleSetEmail(formValue.email);
           navigate('/', { replace: true });
         }
       })

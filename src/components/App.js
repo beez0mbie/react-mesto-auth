@@ -116,6 +116,13 @@ function App() {
     setIsLoggedIn(false);
   };
 
+  const handleSetEmail = (email) => {
+    setCurrentUser((prevState) => ({
+      ...prevState,
+      email,
+    }));
+  };
+
   const handleInfoPopup = (isSucsess) => {
     setIsSucsess(isSucsess);
     setIsInfoPopupOpen(true);
@@ -240,6 +247,7 @@ function App() {
                 <Login
                   handleLogin={handleLogin}
                   handleInfoPopup={handleInfoPopup}
+                  handleSetEmail={handleSetEmail}
                 />
               }
             />
