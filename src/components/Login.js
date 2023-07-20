@@ -1,31 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as apiAuth from '../utils/ApiAuth';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from '../hooks/useForm';
 
 export default function Login({ handleLogin, handleInfoPopup, handleSetEmail }) {
   const navigate = useNavigate();
-  const [formValue, setFormValue] = useState({
+  const { formValues, handleChangeForm } = useForm({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     apiAuth
-      .authorize(formValue.email, formValue.password)
+      .authorize(formValues.email, formValues.password)
       .then((data) => {
         if (data.token) {
           localStorage.setItem('jwt', data.token);
           handleLogin();
-          handleSetEmail(formValue.email);
+          handleSetEmail(formValues.email);
           navigate('/', { replace: true });
         }
       })
@@ -49,8 +42,8 @@ export default function Login({ handleLogin, handleInfoPopup, handleSetEmail }) 
           name="email"
           className="sign__input"
           type="text"
-          value={formValue.email}
-          onChange={handleChange}
+          value={formValues.email}
+          onChange={handleChangeForm}
         />
         <label
           htmlFor="password"
@@ -62,8 +55,8 @@ export default function Login({ handleLogin, handleInfoPopup, handleSetEmail }) 
           name="password"
           className="sign__input"
           type="password"
-          value={formValue.password}
-          onChange={handleChange}
+          value={formValues.password}
+          onChange={handleChangeForm}
         />
         <button
           type="submit"

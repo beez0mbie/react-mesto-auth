@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as apiAuth from '../utils/ApiAuth';
+import { useForm } from '../hooks/useForm';
 
 export default function Register({ handleInfoPopup }) {
   const navigate = useNavigate();
-  const [formValue, setFormValue] = useState({
+  const { formValues, handleChangeForm } = useForm({
     email: '',
     password: '',
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     apiAuth
-      .register(formValue.password, formValue.email)
+      .register(formValues.password, formValues.email)
       .then((res) => {
         handleInfoPopup(true);
         navigate('/sign-in', { replace: true });
@@ -48,8 +41,8 @@ export default function Register({ handleInfoPopup }) {
           name="email"
           className="sign__input"
           type="text"
-          value={formValue.email}
-          onChange={handleChange}
+          value={formValues.email}
+          onChange={handleChangeForm}
         />
         <label
           htmlFor="password"
@@ -61,8 +54,8 @@ export default function Register({ handleInfoPopup }) {
           name="password"
           className="sign__input"
           type="password"
-          value={formValue.password}
-          onChange={handleChange}
+          value={formValues.password}
+          onChange={handleChangeForm}
         />
         <button
           type="submit"
