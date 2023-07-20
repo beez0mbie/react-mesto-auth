@@ -1,19 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 const PopupWithForm = ({ title, name, children, isOpen, onClose, buttonText, onSubmit }) => {
-  const popup = useRef();
-  useEffect(() => {
-    popup.current.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup_opened')) {
-        onClose();
-      }
-    });
-  }, [onClose]);
+  const handleMouseDown = (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+      onClose();
+    }
+  };
   return (
     <div
       className={`popup ${isOpen ? 'popup_opened' : ''}`}
       id={`popup-${name}`}
-      ref={popup}>
+      onMouseDown={handleMouseDown}>
       <div className="popup__container">
         <button
           aria-label="Закрыть попап"
@@ -22,7 +19,6 @@ const PopupWithForm = ({ title, name, children, isOpen, onClose, buttonText, onS
           onClick={onClose}
         />
         <form
-          action="./"
           name={name}
           className="popup-form"
           onSubmit={onSubmit}>

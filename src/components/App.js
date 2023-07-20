@@ -26,6 +26,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [isSucsess, setIsSucsess] = useState(false);
   const [cardIdToDelete, setCardIdToDelete] = useState(null);
   const [selectedCard, setSelectedCard] = useState({ name: '', link: '' });
@@ -41,6 +42,14 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const isPopupOpen =
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    isDeletePopupOpen ||
+    isInfoPopupOpen ||
+    isImagePopupOpen;
+
   useEffect(() => {
     if (isLoggedIn) {
       handleGetAppInfo();
@@ -55,23 +64,11 @@ function App() {
         closeAllPopups();
       }
     };
-    if (
-      isEditAvatarPopupOpen ||
-      isEditProfilePopupOpen ||
-      isAddPlacePopupOpen ||
-      isDeletePopupOpen ||
-      isInfoPopupOpen
-    ) {
+    if (isPopupOpen) {
       document.addEventListener('keydown', handleClosePopupByEsc);
     }
     return () => document.removeEventListener('keydown', handleClosePopupByEsc);
-  }, [
-    isEditAvatarPopupOpen,
-    isEditProfilePopupOpen,
-    isAddPlacePopupOpen,
-    isDeletePopupOpen,
-    isInfoPopupOpen,
-  ]);
+  }, [isPopupOpen]);
 
   const handleTokenCheck = () => {
     const token = localStorage.getItem('jwt');
@@ -142,6 +139,7 @@ function App() {
 
   const handleCardClick = (card) => {
     setSelectedCard(card);
+    setIsImagePopupOpen(true);
   };
 
   const handleCardTrashClick = (card) => {
@@ -155,6 +153,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsDeletePopupOpen(false);
     setIsInfoPopupOpen(false);
+    setIsImagePopupOpen(false);
     setSelectedCard({ name: '', link: '' });
     setCardIdToDelete(null);
   };
@@ -293,6 +292,7 @@ function App() {
             onDeleteCard={handleDeleteCard}
           />
           <ImagePopup
+            isOpen={isImagePopupOpen}
             card={selectedCard}
             onClose={closeAllPopups}
           />

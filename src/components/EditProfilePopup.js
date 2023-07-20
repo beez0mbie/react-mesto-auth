@@ -12,7 +12,7 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, buttonText }) => {
       name: currentUser.name,
       description: currentUser.about,
     });
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

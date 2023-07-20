@@ -1,21 +1,18 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import sucsess_svg from '../images/tooltip-sucsess.svg';
 import fail_svg from '../images/tooltip-fail.svg';
 
 export default function InfoTooltip({ isOpen, onClose, sucsess }) {
-  const popup = useRef();
-  useEffect(() => {
-    popup.current.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup_opened')) {
-        onClose();
-      }
-    });
-  }, [onClose]);
+  const handleMouseDown = (evt) => {
+    if (evt.target.classList.contains('popup_opened')) {
+      onClose();
+    }
+  };
   return (
     <div
       className={`popup ${isOpen ? 'popup_opened' : ''}`}
       id={`popup-sign`}
-      ref={popup}>
+      onMouseDown={handleMouseDown}>
       <div className="popup__container">
         <button
           aria-label="Закрыть попап"
