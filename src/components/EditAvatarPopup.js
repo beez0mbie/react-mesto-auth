@@ -25,20 +25,18 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar, buttonText }) => {
       name="avatar-form"
       buttonText={buttonText}
       onSubmit={handleSubmit}>
-      <>
-        <label className="popup-form__field">
-          <input
-            type="url"
-            name="popup-input-link-avatar"
-            id="popup-input-link-avatar"
-            placeholder="Ссылка на картинку"
-            className="popup-form__input"
-            ref={inputAvatar}
-            required
-          />
-          <span className="popup-form__input-error popup-input-link-avatar-error"></span>
-        </label>
-      </>
+      <label className="popup-form__field">
+        <input
+          type="url"
+          name="popup-input-link-avatar"
+          id="popup-input-link-avatar"
+          placeholder="Ссылка на картинку"
+          className="popup-form__input"
+          ref={inputAvatar}
+          required
+        />
+        <span className="popup-form__input-error popup-input-link-avatar-error"></span>
+      </label>
     </PopupWithForm>
   );
 };

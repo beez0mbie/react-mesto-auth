@@ -30,38 +30,36 @@ const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, buttonText }) => {
       title="Редактировать профиль"
       name="profile-form"
       buttonText={buttonText}>
-      <>
-        <label className="popup-form__field">
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Введите имя профиля"
-            className="popup-form__input"
-            required
-            minLength="2"
-            maxLength="40"
-            value={formValues.name}
-            onChange={handleChangeForm}
-          />
-          <span className="popup-form__input-error popup-input-name-error"></span>
-        </label>
-        <label className="popup-form__field">
-          <input
-            type="text"
-            name="description"
-            id="description"
-            placeholder="Введите название работы"
-            className="popup-form__input"
-            required
-            minLength="2"
-            maxLength="200"
-            value={formValues.description}
-            onChange={handleChangeForm}
-          />
-          <span className="popup-form__input-error popup-input-job-error"></span>
-        </label>
-      </>
+      <label className="popup-form__field">
+        <input
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Введите имя профиля"
+          className="popup-form__input"
+          required
+          minLength="2"
+          maxLength="40"
+          value={formValues.name}
+          onChange={handleChangeForm}
+        />
+        <span className="popup-form__input-error popup-input-name-error"></span>
+      </label>
+      <label className="popup-form__field">
+        <input
+          type="text"
+          name="description"
+          id="description"
+          placeholder="Введите название работы"
+          className="popup-form__input"
+          required
+          minLength="2"
+          maxLength="200"
+          value={formValues.description}
+          onChange={handleChangeForm}
+        />
+        <span className="popup-form__input-error popup-input-job-error"></span>
+      </label>
     </PopupWithForm>
   );
 };
