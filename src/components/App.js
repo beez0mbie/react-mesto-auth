@@ -158,45 +158,6 @@ function App() {
     setCardIdToDelete(null);
   };
 
-  const handleUpdateUser = (currentUser) => {
-    setIsLoading(true);
-    api
-      .updateUserInfo(currentUser.name, currentUser.about)
-      .then((user) => {
-        setCurrentUser((prevState) => ({
-          ...prevState,
-          ...user,
-        }));
-        closeAllPopups();
-      })
-      .catch((err) => console.error(`Error api.updateUserInfo():\n ${err}`))
-      .finally(() => setIsLoading(false));
-  };
-
-  const handleUpdateAvatar = (currentUser) => {
-    setIsLoading(true);
-    api
-      .updateAvatar(currentUser.avatar)
-      .then((user) => {
-        setCurrentUser((prevState) => ({ ...prevState, ...user }));
-        closeAllPopups();
-      })
-      .catch((err) => console.error(`Error api.updateAvatar():\n ${err}`))
-      .finally(() => setIsLoading(false));
-  };
-
-  const handleAddPlace = (card) => {
-    setIsLoading(true);
-    api
-      .addCard(card.name, card.link)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        closeAllPopups();
-      })
-      .catch((err) => console.error(`Error api.addCard():\n ${err}`))
-      .finally(() => setIsLoading(false));
-  };
-
   const handleCardLike = (card) => {
     const isLiked = hasMyLike(card, currentUser);
 
@@ -217,6 +178,41 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => console.error(`Error api.deleteCard():\n ${err}`));
+  };
+
+  const handleSubmit = (request) => {
+    setIsLoading(true);
+    request()
+      .then(() => closeAllPopups())
+      .catch((error) => console.error(`Error in next request:${request}\n${error}`))
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleAddPlace = (card) => {
+    handleSubmit(() =>
+      api.addCard(card.name, card.link).then((newCard) => {
+        setCards([newCard, ...cards]);
+      }),
+    );
+  };
+
+  const handleUpdateAvatar = (currentUser) => {
+    handleSubmit(() =>
+      api.updateAvatar(currentUser.avatar).then((user) => {
+        setCurrentUser((prevState) => ({ ...prevState, ...user }));
+      }),
+    );
+  };
+
+  const handleUpdateUser = (currentUser) => {
+    handleSubmit(() =>
+      api.updateUserInfo(currentUser.name, currentUser.about).then((user) => {
+        setCurrentUser((prevState) => ({
+          ...prevState,
+          ...user,
+        }));
+      }),
+    );
   };
 
   return (
